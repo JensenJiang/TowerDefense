@@ -199,10 +199,10 @@ public class TowerDefense {
 		JSONObject plotConfig;
 		JSONArray towerConfig,monsterConfig,mapConfig;
 		try{
-			towerConfig = (JSONArray)parser.parse(new FileReader("towerConfig.json"));
-			monsterConfig = (JSONArray)parser.parse(new FileReader("monsterConfig.json"));
-			plotConfig = (JSONObject)parser.parse(new FileReader("plotConfig.json"));
-			mapConfig = (JSONArray)parser.parse(new FileReader("mapConfig.json"));
+			towerConfig = (JSONArray)parser.parse(new FileReader("config/towerConfig.json"));
+			monsterConfig = (JSONArray)parser.parse(new FileReader("config/monsterConfig.json"));
+			plotConfig = (JSONObject)parser.parse(new FileReader("config/plotConfig.json"));
+			mapConfig = (JSONArray)parser.parse(new FileReader("config/mapConfig.json"));
 			
 			/* init parameters */
 			towerTypeCount = towerConfig.size();
