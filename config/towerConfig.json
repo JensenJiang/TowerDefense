@@ -1,5 +1,5 @@
-[{"picName":"/resources/Tower0.jpg",
- "shellPicName":"/resources/Shell0.jpg",
+[{"picName":"resources/Tower0.jpg",
+ "shellPicName":"resources/Shell0.jpg",
  "rate":2.0,
  "range":2.0,
  "price":1,
