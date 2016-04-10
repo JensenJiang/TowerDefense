@@ -1,3 +1,4 @@
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.FileNotFoundException;
@@ -39,7 +40,7 @@ class PlaceRegister extends MouseAdapter{
 	}
 	@Override
 	public void mouseClicked(MouseEvent e){
-		if(TowerDefense.tempTower != null){
+		if(TowerDefense.tempTower != null && TowerDefense.vacant[x][y] == 0){
 			TowerDefense.tempTower.setX(x);
 			TowerDefense.tempTower.setY(y);
 			TowerDefense.towers.add(TowerDefense.tempTower);
@@ -52,14 +53,14 @@ class MonsterRegister{
 	String picName;
 	double speed,x,y;
 	int totalHP,killMoney;
-	public MonsterRegister(JSONObject config){
+	public MonsterRegister(JSONObject config,double _x,double _y){
 		/* Parse */
 		picName = (String)config.get("picName");
 		speed = (Double)config.get("speed");
 		totalHP = (int)(long)config.get("totalHP");
 		killMoney = (int)(long)config.get("killMoney");
-		x = (Double)config.get("x");
-		y = (Double)config.get("y");
+		x = _x;
+		y = _y;
 	}
 	void Register(){
 		TowerDefense.mons.add(new Monster(picName,speed,totalHP,killMoney,x,y));
@@ -98,7 +99,7 @@ class Remainder{
 		plotParser = new Parser(p,g_delay);
 	}
 	
-	/* maybe wrong ？ about internal class */
+	/* maybe wrong ? about internal class */
 	private void addMonsterSchedule(MonsterRegister e,int time){
 		eventTimer.schedule(new TimerTask() {
 			@Override
@@ -159,8 +160,9 @@ class Remainder{
 
 public class TowerDefense {
 	/* Resource */
-	static int deltaTime = 100;
+	static int deltaTime = 1000;
 	static int row = 7,column = 15;
+	static int start_x,start_y;
 	static int gold,level,health;
 	static HashSet<Tower> towers;
 	static HashSet<Monster> mons;
@@ -196,14 +198,14 @@ public class TowerDefense {
 	static void init(){
 		/* Open Config File */
 		JSONParser parser = new JSONParser();
-		JSONObject plotConfig;
+		JSONObject plotConfig,pathConfig;
 		JSONArray towerConfig,monsterConfig,mapConfig;
 		try{
 			towerConfig = (JSONArray)parser.parse(new FileReader("config/towerConfig.json"));
 			monsterConfig = (JSONArray)parser.parse(new FileReader("config/monsterConfig.json"));
 			plotConfig = (JSONObject)parser.parse(new FileReader("config/plotConfig.json"));
 			mapConfig = (JSONArray)parser.parse(new FileReader("config/mapConfig.json"));
-			
+			pathConfig = (JSONObject)parser.parse(new FileReader("config/pathConfig.json"));
 			/* init parameters */
 			towerTypeCount = towerConfig.size();
 			monsterTypeCount = monsterConfig.size();
@@ -221,6 +223,14 @@ public class TowerDefense {
 			/* init UI */
 			ui = new UI();
 			
+			/* init path */
+			JSONArray path_x = (JSONArray)pathConfig.get("x"),path_y = (JSONArray)pathConfig.get("y");
+			int path_size = path_x.size();
+			start_x = (int)(long)path_x.get(0);
+			start_y = (int)(long)path_y.get(0);
+			Monster.path = new Point[path_size];
+			for(int i = 0;i < path_size;i++) Monster.path[i] = new Point((int)(long)path_x.get(i), (int)(long)path_y.get(i));
+			
 			/* Register towerButton Action */
 			for(int i = 0;i < towerTypeCount;i++){
 				ui.towerButton[i].addMouseListener(new TowerRegister((JSONObject)towerConfig.get(i)));
@@ -233,7 +243,7 @@ public class TowerDefense {
 			/* Register monsterMaker */
 			monsterMaker = new MonsterRegister[monsterTypeCount];
 			for(int i = 0;i < monsterTypeCount;i++){
-				monsterMaker[i] = new MonsterRegister((JSONObject)(monsterConfig.get(i)));
+				monsterMaker[i] = new MonsterRegister((JSONObject)(monsterConfig.get(i)),(double)start_x,(double)start_y);
 			}
 			
 			/* init global schedule */
