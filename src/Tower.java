@@ -1,4 +1,6 @@
 import java.awt.Point;
+
+import javax.print.attribute.standard.PrinterLocation;
 import javax.swing.*;
 
 public class Tower {
@@ -32,11 +34,11 @@ public class Tower {
 	}
 	
 	// getters and setters
-	public double getX()
+	public int getX()
 	{
 		return x;
 	}
-	public double getY()
+	public int getY()
 	{
 		return y;
 	}
