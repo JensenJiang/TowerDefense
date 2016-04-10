@@ -6,7 +6,7 @@ public class Tower {
 	String picName;
 	String shellPicName;
 	public JLabel label;
-	double x, y;
+	int x, y;	//Block x,y
 	double angle;
 	int price;
 	int atk;
@@ -17,7 +17,7 @@ public class Tower {
 	private int timer = 0;
 	private Monster obj = null;
 	
-	Tower(String picName, String shellpicName, double x, double y, int price, int atk, double rate, double range)
+	Tower(String picName, String shellpicName, int x, int y, int price, int atk, double rate, double range)
 	{
 		this.picName = picName;
 		this.shellPicName = shellpicName;
@@ -40,10 +40,10 @@ public class Tower {
 	{
 		return y;
 	}
-	public void setX(double _x){
+	public void setX(int _x){
 		x = _x;
 	}
-	public void setY(double _y){
+	public void setY(int _y){
 		y = _y;
 	}
 	public double getAngle()
