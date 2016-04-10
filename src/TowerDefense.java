@@ -28,7 +28,8 @@ class TowerRegister extends MouseAdapter{
 	/* Only Add to */
 	@Override
 	public void mouseClicked(MouseEvent e){
-		TowerDefense.tempTower = new Tower(picName,shellPicName,0,0,price,atk,rate,range);
+		if(TowerDefense.moneyEnough(price))
+			TowerDefense.tempTower = new Tower(picName,shellPicName,0,0,price,atk,rate,range);
 	}
 }
 
@@ -44,6 +45,7 @@ class PlaceRegister extends MouseAdapter{
 			TowerDefense.tempTower.setX(x);
 			TowerDefense.tempTower.setY(y);
 			TowerDefense.towers.add(TowerDefense.tempTower);
+			TowerDefense.moneyChange(-TowerDefense.tempTower.price);
 			TowerDefense.tempTower = null;
 		}
 	}
@@ -160,10 +162,10 @@ class Remainder{
 
 public class TowerDefense {
 	/* Resource */
-	static int deltaTime = 1000;
+	static int deltaTime = 150;
 	static int row = 7,column = 15;
 	static int start_x,start_y;
-	static int gold,level,health;
+	static int gold = 100,level,health;
 	static HashSet<Tower> towers;
 	static HashSet<Monster> mons;
 	static HashSet<Shell> shells;
@@ -189,7 +191,10 @@ public class TowerDefense {
 		health += d;
 	}
 	
-	//TODO: 
+	static boolean moneyEnough(int d){
+		return d <= gold;
+	}
+	
 	static void moneyChange(int d){
 		gold += d;
 	}
@@ -247,7 +252,7 @@ public class TowerDefense {
 			}
 			
 			/* init global schedule */
-			schedule = new Remainder(deltaTime,500,plotConfig);
+			schedule = new Remainder(deltaTime,1500,plotConfig);
 			schedule.start();
 			
 		}catch(FileNotFoundException e){
