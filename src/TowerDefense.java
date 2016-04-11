@@ -162,7 +162,7 @@ class Reminder{
 
 public class TowerDefense {
 	/* Resource */
-	static int deltaTime = 150;
+	static int deltaTime = 50;
 	static int row = 7,column = 15;
 	static int start_x,start_y;
 	static int gold = 100,level,health;

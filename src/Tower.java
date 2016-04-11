@@ -62,7 +62,7 @@ public class Tower {
 		timer -= TowerDefense.deltaTime;
 		if(timer < 0)	timer = 0;
 		
-		if(obj == null)
+		if(obj == null || obj.toDestroy)
 			obj = search();
 		if(obj != null && timer == 0)
 			attack(obj);
@@ -70,9 +70,11 @@ public class Tower {
 	
 	void attack(Monster m)
 	{
-		Shell s = new Shell(shellPicName, x, y, atk, 1000, m);
+		Point screenP = TowerDefense.ui.gridToCoordinate(new Point(x, y));
+		Shell s = new Shell(shellPicName, screenP.x, screenP.y, atk, 0.4, m);
 		TowerDefense.registerShell(s);
 		timer += 1000 * rate;
+		// System.out.println("Attack!");
 	}
 	
 	Monster search()

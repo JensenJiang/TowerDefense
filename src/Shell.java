@@ -42,17 +42,21 @@ public class Shell {
 	// functions
 	public void update()
 	{
+		// System.out.printf("Run! pos = (%f, %f)\n", x, y);
+		if(obj.toDestroy)
+			toDestroy = true;
 		if(toDestroy)
 			return;
+		angle = Math.atan2(obj.y - y, obj.x - x);
 		x += speed * TowerDefense.deltaTime * Math.cos(angle);
 		y += speed * TowerDefense.deltaTime * Math.sin(angle);
-		angle = Math.atan2(obj.y - y, obj.x - x);
-		if(Point.distance(x, y, obj.x, obj.y) < 0.01)
+		if(Point.distance(x, y, obj.x, obj.y) < 10)
 			explode();
 	}
 	
 	public void explode()
 	{
+		// System.out.println("Boom!");
 		if(toDestroy)
 			return;
 		obj.hurt(damage);
