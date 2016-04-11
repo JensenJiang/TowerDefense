@@ -47,6 +47,7 @@ class PlaceRegister extends MouseAdapter{
 			TowerDefense.towers.add(TowerDefense.tempTower);
 			TowerDefense.moneyChange(-TowerDefense.tempTower.price);
 			TowerDefense.tempTower = null;
+			TowerDefense.vacant[x][y] = 1;
 		}
 	}
 }
@@ -163,13 +164,13 @@ class Reminder{
 public class TowerDefense {
 	/* Resource */
 	static int deltaTime = 50;
-	static int row = 7,column = 15;
+	static int row = 7, column = 15;
 	static int start_x,start_y;
-	static int gold = 100,level,health;
+	static int gold = 100, level, health;
 	static HashSet<Tower> towers;
 	static HashSet<Monster> mons;
 	static HashSet<Shell> shells;
-	static int[][] vacant;
+	static int[][] vacant;	// -1 = Road, 0 = Empty ground, 1 = Built ground
 	static Tower tempTower;
 	static MonsterRegister[] monsterMaker;
 	static Reminder schedule;
