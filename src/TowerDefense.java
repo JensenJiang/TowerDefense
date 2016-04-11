@@ -72,18 +72,16 @@ class MonsterRegister{
 
 class Reminder{
 	class Parser{
-		JSONObject plot;
 		int delay;
+		private Object[] startTime,monCount,monList;
 		Parser(JSONObject p,int d){
-			plot = p;
+			startTime = ((JSONArray)p.get("start")).toArray();
+			monCount = ((JSONArray)p.get("count")).toArray();
+			monList = ((JSONArray)p.get("list")).toArray();
 			delay = d;
 		}
 		/* unhandled plot error */
 		void parse(){
-			Object[] startTime,monCount,monList;
-			startTime = ((JSONArray)plot.get("start")).toArray();
-			monCount = ((JSONArray)plot.get("count")).toArray();
-			monList = ((JSONArray)plot.get("list")).toArray();
 			int size = startTime.length,j = 0;
 			for(int i = 0;i < size;i++){
 				int c = (int)(long)monCount[i],time = (int)(long)startTime[i] * 1000;
@@ -95,11 +93,18 @@ class Reminder{
 	}
 	Parser plotParser;
 	Timer eventTimer;
-	int updateDelay;
-	Reminder(int u_delay,int g_delay,JSONObject p){
-		eventTimer = new Timer();
+	int updateDelay,start_health,start_gold;
+	int[][] mapBlock;
+	TowerRegister[] towerRegisters;
+	PlaceRegister[][] placeRegisters;
+	Reminder(int u_delay,int g_delay,JSONObject p,int m[][],int g,int h,TowerRegister[] _tr,PlaceRegister[][] _pr){
 		updateDelay = u_delay;
 		plotParser = new Parser(p,g_delay);
+		mapBlock = m;
+		start_gold = g;
+		start_health = h;
+		towerRegisters = _tr;
+		placeRegisters = _pr;
 	}
 	
 	/* maybe wrong ? about internal class */
@@ -110,6 +115,20 @@ class Reminder{
 				e.Register();
 			}
 		}, time);
+	}
+	
+	private void initRes(){
+		TowerDefense.mons = new HashSet<>();
+		TowerDefense.towers = new HashSet<>();
+		TowerDefense.shells =  new HashSet<>();
+		TowerDefense.gold = start_gold;
+		TowerDefense.health = start_health;
+		TowerDefense.vacant = mapBlock.clone();
+		TowerDefense.ui = new UI();
+		for(int i = 0;i < TowerDefense.towerTypeCount;i++)
+			TowerDefense.ui.towerButton[i].addMouseListener(towerRegisters[i]);
+		for(int i = 0;i < TowerDefense.row;i++) for(int j = 0;j < TowerDefense.column;j++)
+			TowerDefense.ui.mapBlocks[i][j].addMouseListener(placeRegisters[i][j]);
 	}
 	
 	private void updateSchedule(){
@@ -164,6 +183,8 @@ class Reminder{
 		
 	}
 	public void start(){
+		initRes();
+		eventTimer = new Timer();
 		plotParser.parse();
 		updateSchedule();
 	}
@@ -208,6 +229,11 @@ public class TowerDefense {
 		gold += d;
 	}
 	
+	
+	static public void startGame(){
+		schedule.start();
+	}
+	
 	/* Init */
 	static void init(){
 		/* Open Config File */
@@ -224,16 +250,12 @@ public class TowerDefense {
 			towerTypeCount = towerConfig.size();
 			monsterTypeCount = monsterConfig.size();
 			
-			/* init container */
-			towers = new HashSet<>();
-			mons = new HashSet<>();
-			shells = new HashSet<>();
-			vacant = new int[row][column];
+			int[][] m = new int[row][column];
 			for(int i = 0;i < row;i++){
 				JSONArray temp_row = (JSONArray)mapConfig.get(i);
-				for(int j = 0;j < column;j++) vacant[i][j] = (int)(long)temp_row.get(j);
+				for(int j = 0;j < column;j++) m[i][j] = (int)(long)temp_row.get(j);
 			}
-			
+			vacant = m.clone();
 			/* init path */
 			JSONArray path_x = (JSONArray)pathConfig.get("x"),path_y = (JSONArray)pathConfig.get("y");
 			int path_size = path_x.size();
@@ -242,17 +264,16 @@ public class TowerDefense {
 			Monster.path = new Point[path_size];
 			for(int i = 0;i < path_size;i++) Monster.path[i] = new Point((int)(long)path_x.get(i), (int)(long)path_y.get(i));
 			
-			/* init UI */
-			ui = new UI();
-			
-			/* Register towerButton Action */
+			/* produce towerButton Action Register */
+			TowerRegister[] tr = new TowerRegister[towerTypeCount];
 			for(int i = 0;i < towerTypeCount;i++){
-				ui.towerButton[i].addMouseListener(new TowerRegister((JSONObject)towerConfig.get(i)));
+				tr[i] = new TowerRegister((JSONObject)towerConfig.get(i));
 			}
 			
 			/* Register mapBlocks Action */
+			PlaceRegister[][] pr = new PlaceRegister[row][column];
 			for(int i = 0;i < row;i++) for(int j = 0;j < column;j++)
-				ui.mapBlocks[i][j].addMouseListener(new PlaceRegister(i,j));
+				pr[i][j] = new PlaceRegister(i,j);
 			
 			/* Register monsterMaker */
 			monsterMaker = new MonsterRegister[monsterTypeCount];
@@ -261,8 +282,7 @@ public class TowerDefense {
 			}
 			
 			/* init global schedule */
-			schedule = new Reminder(deltaTime,1500,plotConfig);
-			schedule.start();
+			schedule = new Reminder(deltaTime,1500,plotConfig,m,100,10,tr,pr);
 			
 		}catch(FileNotFoundException e){
 			System.out.println("Couldn't open json file:");
@@ -275,13 +295,13 @@ public class TowerDefense {
 		}
 	}
 	
-	public static void main(String[] args) {
-		init();
-	}
-	
 	public static void gameOver()
 	{
 		System.out.println("game over!");
 	}
 	
+	public static void main(String[] args) {
+		init();
+		startGame();
+	}
 }
