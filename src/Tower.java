@@ -8,7 +8,8 @@ public class Tower {
 	String picName;
 	String shellPicName;
 	public JLabel label;
-	int x, y;	//Block x,y
+	int x, y;	//Block x, y
+	double scx, scy;
 	double angle;
 	int price;
 	int atk;
@@ -29,7 +30,6 @@ public class Tower {
 		this.atk = atk;
 		this.rate = rate;
 		this.range = range;
-		
 		label = new JLabel(new ImageIcon(picName));
 	}
 	
@@ -44,9 +44,15 @@ public class Tower {
 	}
 	public void setX(int _x){
 		x = _x;
+		Point p = TowerDefense.ui.gridToCoordinate(new Point(x, y));
+		scx = p.x;
+		scy = p.y;
 	}
 	public void setY(int _y){
 		y = _y;
+		Point p = TowerDefense.ui.gridToCoordinate(new Point(x, y));
+		scx = p.x;
+		scy = p.y;
 	}
 	public double getAngle()
 	{
@@ -70,8 +76,7 @@ public class Tower {
 	
 	void attack(Monster m)
 	{
-		Point screenP = TowerDefense.ui.gridToCoordinate(new Point(x, y));
-		Shell s = new Shell(shellPicName, screenP.x, screenP.y, atk, 0.4, m);
+		Shell s = new Shell(shellPicName, scx, scy, atk, 0.4, m);
 		TowerDefense.registerShell(s);
 		timer += 1000 * rate;
 		// System.out.println("Attack!");
@@ -80,7 +85,7 @@ public class Tower {
 	Monster search()
 	{
 		for(Monster m : TowerDefense.mons){
-			if(Point.distance(x, y, m.x, m.y) <= range){
+			if(Point.distance(scx, scy, m.x, m.y) <= range){
 				return m;
 			}
 		}
