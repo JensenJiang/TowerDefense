@@ -172,10 +172,10 @@ public class UI {
 		towerButton = new JLabel[ttc];
 		for(int i = 0; i < ttc; i++)
 		{
-			towerButton[i] = new JLabel("TOWER" + i);
+			towerButton[i] = new JLabel(new ImageIcon("resources/TowerButton0.jpg"));
 			controlPanel.add(towerButton[i]);
-			towerButton[i].setBounds((2 * i + 1) * 900 / (2 * ttc + 1), 20, 900 / (2 * ttc + 1), 50);
-			towerButton[i].setBackground(new Color(150, 150, 150));
+			towerButton[i].setBounds((i + 1) * 900 / (ttc + 1) - UNIT_SIZE / 2, 20, UNIT_SIZE, UNIT_SIZE);
+			// towerButton[i].setBackground(new Color(150, 150, 150));
 			towerButton[i].setOpaque(true);
 		}
 
