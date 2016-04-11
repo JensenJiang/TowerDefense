@@ -69,7 +69,7 @@ class MonsterRegister{
 	}
 }
 
-class Remainder{
+class Reminder{
 	class Parser{
 		JSONObject plot;
 		int delay;
@@ -95,7 +95,7 @@ class Remainder{
 	Parser plotParser;
 	Timer eventTimer;
 	int updateDelay;
-	Remainder(int u_delay,int g_delay,JSONObject p){
+	Reminder(int u_delay,int g_delay,JSONObject p){
 		eventTimer = new Timer();
 		updateDelay = u_delay;
 		plotParser = new Parser(p,g_delay);
@@ -172,7 +172,7 @@ public class TowerDefense {
 	static int[][] vacant;
 	static Tower tempTower;
 	static MonsterRegister[] monsterMaker;
-	static Remainder schedule;
+	static Reminder schedule;
 	
 	/* UI */
 	static UI ui;
@@ -252,7 +252,7 @@ public class TowerDefense {
 			}
 			
 			/* init global schedule */
-			schedule = new Remainder(deltaTime,1500,plotConfig);
+			schedule = new Reminder(deltaTime,1500,plotConfig);
 			schedule.start();
 			
 		}catch(FileNotFoundException e){

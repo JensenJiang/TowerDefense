@@ -44,21 +44,12 @@ public class UI {
 		for(int i = 0; i < volatileLayers.length; i++)
 		{
 			toRefresh = gameMap.getComponentsInLayer(volatileLayers[i]);
-			/// System.out.println(volatileLayers[i] + ": " + gameMap.getComponentCountInLayer(volatileLayers[i]));
 			for(int j = 0; j < toRefresh.length; j++)
 			{
 				gameMap.remove(toRefresh[j]);
 			}
 		}
 		
-		/*
-		Component[] ac = gameMap.getComponents();
-		System.out.println(ac.length);
-		for(int i = 0; i < ac.length; i++)
-		{
-			System.out.println(i + ": " + gameMap.getLayer(ac[i]));
-		}
-		*/
 		// Show Towers
 		for(Iterator<Tower> it = TowerDefense.towers.iterator(); it.hasNext();)
 		{
@@ -86,7 +77,7 @@ public class UI {
 					UNIT_SIZE
 			);
 			t.label.setOpaque(true);
-			
+			/*
 			JLabel totalHPLabel = new JLabel();
 			gameMap.add(totalHPLabel, UI_LAYER);
 			totalHPLabel.setBackground(Color.gray);
@@ -97,9 +88,9 @@ public class UI {
 					GAP_SIZE
 			);
 			totalHPLabel.setOpaque(true);
-			
+			*/
 			JLabel curHPLabel = new JLabel();
-			gameMap.add(curHPLabel, UI_LAYER + 1);
+			gameMap.add(curHPLabel, (Integer)(UI_LAYER + 1));
 			curHPLabel.setBackground(Color.red);
 			curHPLabel.setBounds(
 					(int)t.x - UNIT_SIZE / 2, 
@@ -140,7 +131,7 @@ public class UI {
 					{
 						Point cen = gridToCoordinate(new Point(i, j));
 						JLabel here = new JLabel(new ImageIcon("placeHere.png"));
-						gameMap.add(here, UI_LAYER - 1);
+						gameMap.add(here, (Integer)(UI_LAYER - 1));
 						here.setBounds(cen.x - UNIT_SIZE / 2, cen.y - UNIT_SIZE / 2, UNIT_SIZE, UNIT_SIZE);
 						here.setOpaque(true);
 					}
