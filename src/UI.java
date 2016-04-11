@@ -63,10 +63,11 @@ public class UI {
 		for(Iterator<Tower> it = TowerDefense.towers.iterator(); it.hasNext();)
 		{
 			Tower t = it.next();
+			Point _pos = gridToCoordinate(new Point(t.getX(), t.getY()));
 			gameMap.add(t.label, TOWER_LAYER);
 			t.label.setBounds(
-					(int)t.x - UNIT_SIZE / 2, 
-					(int)t.y - UNIT_SIZE / 2, 
+					_pos.x - UNIT_SIZE / 2, 
+					_pos.y - UNIT_SIZE / 2, 
 					UNIT_SIZE, 
 					UNIT_SIZE
 			);
