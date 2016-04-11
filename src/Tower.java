@@ -1,6 +1,5 @@
 import java.awt.Point;
 
-import javax.print.attribute.standard.PrinterLocation;
 import javax.swing.*;
 
 public class Tower {
@@ -18,7 +17,6 @@ public class Tower {
 	public boolean toDestroy = false;
 	
 	private int timer = 0;
-	private Monster obj = null;
 	
 	Tower(String picName, String shellpicName, int x, int y, int price, int atk, double rate, double range)
 	{
@@ -68,10 +66,12 @@ public class Tower {
 		timer -= TowerDefense.deltaTime;
 		if(timer < 0)	timer = 0;
 		
-		if(obj == null || obj.toDestroy)
-			obj = search();
-		if(obj != null && timer == 0)
-			attack(obj);
+		if(timer == 0)
+		{
+			Monster obj = search();
+			if(obj != null)
+				attack(obj);
+		}
 	}
 	
 	void attack(Monster m)

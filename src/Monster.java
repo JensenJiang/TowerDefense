@@ -1,9 +1,7 @@
 import java.awt.*;
-import java.awt.image.*;
 import javax.swing.*;
 
 public class Monster {
-	//TODO: path?
 	static Point[] path;
 	
 	String picName;
@@ -15,6 +13,7 @@ public class Monster {
 	double x, y;
 	double angle;
 	public boolean toDestroy = false;
+	public int lifeTime = 0;
 	
 	int destID;		// going to path[destID]
 	
@@ -68,6 +67,7 @@ public class Monster {
 	{
 		if(toDestroy)
 			return;
+		lifeTime++;
 		if(curHP <= 0)
 		{
 			die();
