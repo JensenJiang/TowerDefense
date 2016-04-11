@@ -1,8 +1,6 @@
 import java.awt.*;
-import java.awt.event.MouseEvent;
 import java.util.*;
 import javax.swing.*;
-import javax.swing.event.MouseInputListener;
 
 public class UI {
 	JFrame frame;
@@ -18,11 +16,11 @@ public class UI {
 	JLabel[] towerButton;
 	JLabel[][] mapBlocks;
 	
-	private static int GROUND_LAYER = 1;
-	private static int TOWER_LAYER = 2;
-	private static int MONSTER_LAYER = 3;
-	private static int SHELL_LAYER = 4;
-	private static int UI_LAYER = 100;
+	private static Integer GROUND_LAYER = 10;
+	private static Integer TOWER_LAYER = 20;
+	private static Integer MONSTER_LAYER = 30;
+	private static Integer SHELL_LAYER = 40;
+	private static Integer UI_LAYER = 90;
 	private int ROW = 7;
 	private int COL = 15;
 	private int GRID_SIZE = 60;
@@ -40,17 +38,27 @@ public class UI {
 	
 	public void update() {
 		// Clear all the game objects
-		final int[] volatileLayers = {TOWER_LAYER, MONSTER_LAYER, SHELL_LAYER, UI_LAYER, UI_LAYER + 1};
+		final Integer[] volatileLayers = {TOWER_LAYER, MONSTER_LAYER, SHELL_LAYER, UI_LAYER - 1, UI_LAYER, UI_LAYER + 1};
+		
 		Component[] toRefresh;
 		for(int i = 0; i < volatileLayers.length; i++)
 		{
 			toRefresh = gameMap.getComponentsInLayer(volatileLayers[i]);
-			for(Component c : toRefresh)
+			/// System.out.println(volatileLayers[i] + ": " + gameMap.getComponentCountInLayer(volatileLayers[i]));
+			for(int j = 0; j < toRefresh.length; j++)
 			{
-				gameMap.remove(c);
+				gameMap.remove(toRefresh[j]);
 			}
 		}
 		
+		/*
+		Component[] ac = gameMap.getComponents();
+		System.out.println(ac.length);
+		for(int i = 0; i < ac.length; i++)
+		{
+			System.out.println(i + ": " + gameMap.getLayer(ac[i]));
+		}
+		*/
 		// Show Towers
 		for(Iterator<Tower> it = TowerDefense.towers.iterator(); it.hasNext();)
 		{
@@ -131,12 +139,13 @@ public class UI {
 					{
 						Point cen = gridToCoordinate(new Point(i, j));
 						JLabel here = new JLabel(new ImageIcon("placeHere.png"));
-						gameMap.add(here, UI_LAYER);
+						gameMap.add(here, UI_LAYER - 1);
 						here.setBounds(cen.x - UNIT_SIZE / 2, cen.y - UNIT_SIZE / 2, UNIT_SIZE, UNIT_SIZE);
 						here.setOpaque(true);
 					}
 				}
 		}
+		gameMap.repaint();
 	}
 	
 	UI()
@@ -212,9 +221,9 @@ public class UI {
 			JLabel tmpLb = new JLabel();
 			mapBlocks[i][j] = tmpLb;
 			if(TowerDefense.vacant[i][j] == -1)
-				tmpLb.setText("ROAD");
+				tmpLb.setIcon(new ImageIcon("resources/Road.jpg"));
 			else
-				tmpLb.setText("GND");
+				tmpLb.setIcon(new ImageIcon("resources/Ground.jpg"));
 			// tmpLb.setBackground(new Color((i + j) * 5 + 50, (i + j) * 5 + 50, (i + j) * 5 + 50));
 			gameMap.add(tmpLb, GROUND_LAYER);
 			tmpLb.setBounds(j * 60, i * 60, 60, 60);
