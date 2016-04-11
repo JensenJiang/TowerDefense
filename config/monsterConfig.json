@@ -1,5 +1,5 @@
-[{"picName":"resources/Monster0.jpg",
+[{"picName":"resources/Monster0.png",
  "speed":0.1,
- "totalHP":5,
- "killMoney":1000}
+ "totalHP":10,
+ "killMoney":20}
 ]

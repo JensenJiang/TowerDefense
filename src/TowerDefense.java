@@ -116,6 +116,14 @@ class Reminder{
 		eventTimer.schedule(new TimerTask() {
 			@Override
 			public void run() {
+				/* see if game over */
+				if(TowerDefense.health <= 0)
+				{
+					TowerDefense.gameOver();
+					eventTimer.cancel();
+					return;
+				}
+				
 				/* update Tower */
 				for(Iterator<Tower> i = TowerDefense.towers.iterator();i.hasNext();){
 					Tower t = i.next();
@@ -166,7 +174,7 @@ public class TowerDefense {
 	static int deltaTime = 50;
 	static int row = 7, column = 15;
 	static int start_x,start_y;
-	static int gold = 100, level, health;
+	static int gold = 100, level, health = 1;
 	static HashSet<Tower> towers;
 	static HashSet<Monster> mons;
 	static HashSet<Shell> shells;
@@ -226,9 +234,6 @@ public class TowerDefense {
 				for(int j = 0;j < column;j++) vacant[i][j] = (int)(long)temp_row.get(j);
 			}
 			
-			/* init UI */
-			ui = new UI();
-			
 			/* init path */
 			JSONArray path_x = (JSONArray)pathConfig.get("x"),path_y = (JSONArray)pathConfig.get("y");
 			int path_size = path_x.size();
@@ -236,6 +241,9 @@ public class TowerDefense {
 			start_y = (int)(long)path_y.get(0);
 			Monster.path = new Point[path_size];
 			for(int i = 0;i < path_size;i++) Monster.path[i] = new Point((int)(long)path_x.get(i), (int)(long)path_y.get(i));
+			
+			/* init UI */
+			ui = new UI();
 			
 			/* Register towerButton Action */
 			for(int i = 0;i < towerTypeCount;i++){
@@ -270,4 +278,10 @@ public class TowerDefense {
 	public static void main(String[] args) {
 		init();
 	}
+	
+	public static void gameOver()
+	{
+		System.out.println("game over!");
+	}
+	
 }

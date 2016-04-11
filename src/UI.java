@@ -63,7 +63,7 @@ public class UI {
 					UNIT_SIZE, 
 					UNIT_SIZE
 			);
-			t.label.setOpaque(true);
+			t.label.setOpaque(false);
 		}
 		
 		// Show Monsters
@@ -77,7 +77,7 @@ public class UI {
 					UNIT_SIZE, 
 					UNIT_SIZE
 			);
-			t.label.setOpaque(true);
+			t.label.setOpaque(false);
 			
 			JLabel totalHPLabel = new JLabel();
 			gameMap.add(totalHPLabel, UI_LAYER);
@@ -113,13 +113,13 @@ public class UI {
 					SHELL_SIZE, 
 					SHELL_SIZE
 			);
-			t.label.setOpaque(true);
+			t.label.setOpaque(false);
 		}
 		
 		// Update labels
 		goldLabel.setText("Gold : " + TowerDefense.gold);
 		levelLabel.setText("Level : " + TowerDefense.level);
-		nextTLabel.setText("Next Wave in : " + TowerDefense.nextT + "secs");
+		nextTLabel.setText("Next Wave in : " + TowerDefense.nextT + " secs");
 		healthLabel.setText("Health : " + TowerDefense.health);
 		
 		// Placing Tower
@@ -139,6 +139,17 @@ public class UI {
 					placeHere[i][j].setVisible(false);
 				}
 		}
+		
+		// tower buttons
+		for(int i = 0; i < towerButton.length; i++)
+		{
+			int towerPrice = ((TowerRegister)towerButton[i].getMouseListeners()[0]).price;
+			if(TowerDefense.moneyEnough(towerPrice))
+				towerButton[i].setEnabled(true);
+			else
+				towerButton[i].setEnabled(false);
+		}
+		
 		gameMap.repaint();
 	}
 	
@@ -172,11 +183,11 @@ public class UI {
 		towerButton = new JLabel[ttc];
 		for(int i = 0; i < ttc; i++)
 		{
-			towerButton[i] = new JLabel(new ImageIcon("resources/TowerButton0.jpg"));
+			towerButton[i] = new JLabel(new ImageIcon("resources/TowerButton" + i + ".png"));
 			controlPanel.add(towerButton[i]);
 			towerButton[i].setBounds((i + 1) * 900 / (ttc + 1) - UNIT_SIZE / 2, 20, UNIT_SIZE, UNIT_SIZE);
 			// towerButton[i].setBackground(new Color(150, 150, 150));
-			towerButton[i].setOpaque(true);
+			towerButton[i].setOpaque(false);
 		}
 
 		gameMap = new JLayeredPane();
@@ -194,19 +205,19 @@ public class UI {
 		
 		goldLabel = new JLabel("Gold : " + TowerDefense.gold);
 		statusBar.add(goldLabel);
-		goldLabel.setBounds(60, 0, 100, 50);
+		goldLabel.setBounds(50, 0, 150, 50);
 
 		levelLabel = new JLabel("Level : " + TowerDefense.level);
 		statusBar.add(levelLabel);
-		levelLabel.setBounds(160, 0, 100, 50);
+		levelLabel.setBounds(210, 0, 150, 50);
 
-		nextTLabel = new JLabel("Next Wave in : " + TowerDefense.nextT + "secs");
+		nextTLabel = new JLabel("Next Wave in : " + TowerDefense.nextT + " secs");
 		statusBar.add(nextTLabel);
-		nextTLabel.setBounds(260, 0, 100, 50);
+		nextTLabel.setBounds(370, 0, 300, 50);
 
 		healthLabel = new JLabel("Health : " + TowerDefense.health);
 		statusBar.add(healthLabel);
-		healthLabel.setBounds(360, 0, 100, 50);
+		healthLabel.setBounds(680, 0, 150, 50);
 
 		mapBlocks = new JLabel[ROW+1][COL+1];
 		placeHere = new JLabel[ROW+1][COL+1];
@@ -216,19 +227,19 @@ public class UI {
 				JLabel tmpLb = new JLabel();
 				mapBlocks[i][j] = tmpLb;
 				if(TowerDefense.vacant[i][j] == -1)
-					tmpLb.setIcon(new ImageIcon("resources/Road.jpg"));
+					tmpLb.setIcon(new ImageIcon("resources/Road.png"));
 				else
-					tmpLb.setIcon(new ImageIcon("resources/Ground.jpg"));
+					tmpLb.setIcon(new ImageIcon("resources/Ground.png"));
 				// tmpLb.setBackground(new Color((i + j) * 5 + 50, (i + j) * 5 + 50, (i + j) * 5 + 50));
 				gameMap.add(tmpLb, GROUND_LAYER);
 				tmpLb.setBounds(j * 60, i * 60, 60, 60);
 				tmpLb.setOpaque(true);
 				
-				placeHere[i][j] = new JLabel(new ImageIcon("resources/placeHere.jpg"));
+				placeHere[i][j] = new JLabel(new ImageIcon("resources/placeHere.png"));
 				gameMap.add(placeHere[i][j], (Integer)(UI_LAYER - 1));
 				Point cen = gridToCoordinate(new Point(i, j));
 				placeHere[i][j].setBounds(cen.x - UNIT_SIZE / 2, cen.y - UNIT_SIZE / 2, UNIT_SIZE, UNIT_SIZE);
-				placeHere[i][j].setOpaque(true);
+				placeHere[i][j].setOpaque(false);
 				placeHere[i][j].setVisible(false);
 			}
 	}
