@@ -183,6 +183,7 @@ class Reminder{
 		
 	}
 	public void start(){
+		/// System.out.println("Start!");
 		initRes();
 		eventTimer = new Timer();
 		plotParser.parse();
@@ -195,7 +196,7 @@ public class TowerDefense {
 	static int deltaTime = 50;
 	static int row = 7, column = 15;
 	static int start_x,start_y;
-	static int gold = 100, level, health = 1;
+	static int gold, level, health;
 	static HashSet<Tower> towers;
 	static HashSet<Monster> mons;
 	static HashSet<Shell> shells;
@@ -231,6 +232,7 @@ public class TowerDefense {
 	
 	
 	static public void startGame(){
+		/// System.out.println("startGame()");
 		schedule.start();
 	}
 	
@@ -282,7 +284,7 @@ public class TowerDefense {
 			}
 			
 			/* init global schedule */
-			schedule = new Reminder(deltaTime,1500,plotConfig,m,100,10,tr,pr);
+			schedule = new Reminder(deltaTime,1500,plotConfig,m,100,1,tr,pr);
 			
 		}catch(FileNotFoundException e){
 			System.out.println("Couldn't open json file:");
@@ -297,7 +299,7 @@ public class TowerDefense {
 	
 	public static void gameOver()
 	{
-		System.out.println("game over!");
+		ui.showGameOver();
 	}
 	
 	public static void main(String[] args) {

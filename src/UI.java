@@ -16,6 +16,7 @@ public class UI {
 	JLabel[] towerButton;
 	JLabel[][] mapBlocks;
 	JLabel[][] placeHere;
+	JPanel msgBox;
 	
 	private static Integer GROUND_LAYER = 10;
 	private static Integer TOWER_LAYER = 20;
@@ -183,7 +184,7 @@ public class UI {
 		towerButton = new JLabel[ttc];
 		for(int i = 0; i < ttc; i++)
 		{
-			towerButton[i] = new JLabel(new ImageIcon("resources/TowerButton" + i + ".png"));
+			towerButton[i] = new JLabel(new ImageIcon("resources/Tower" + i + ".png"));
 			controlPanel.add(towerButton[i]);
 			towerButton[i].setBounds((i + 1) * 900 / (ttc + 1) - UNIT_SIZE / 2, 20, UNIT_SIZE, UNIT_SIZE);
 			// towerButton[i].setBackground(new Color(150, 150, 150));
@@ -218,7 +219,8 @@ public class UI {
 		healthLabel = new JLabel("Health : " + TowerDefense.health);
 		statusBar.add(healthLabel);
 		healthLabel.setBounds(680, 0, 150, 50);
-
+		
+		// $mapBlock and $placeHere
 		mapBlocks = new JLabel[ROW+1][COL+1];
 		placeHere = new JLabel[ROW+1][COL+1];
 
@@ -243,5 +245,39 @@ public class UI {
 				placeHere[i][j].setVisible(false);
 			}
 	}
-
+	
+	public void showGameOver()
+	{
+		msgBox = new JPanel(new FlowLayout());
+		msgBox.setBounds(300, 250, 300, 100);
+		
+		JLabel msg = new JLabel("Game Over");
+		msg.setFont(new Font(null, Font.PLAIN, 20));
+		msg.setBounds(90, 0, 200, 40);
+		
+		JButton restart = new JButton("Restart");
+		restart.addActionListener(e -> {
+			TowerDefense.startGame();
+		});
+		restart.setBounds(20, 50, 120, 30);
+		
+		JButton quit = new JButton("Quit");
+		quit.addActionListener(e -> {
+			System.exit(0);
+		});
+		quit.setBounds(160, 50, 120, 30);
+		
+		msgBox.add(msg);
+		msgBox.add(restart);
+		msgBox.add(quit);
+		msg.setOpaque(true);
+		restart.setOpaque(true);
+		quit.setOpaque(true);
+		// msgBox.setBackground(Color.gray);
+		msgBox.setVisible(true);
+		msgBox.setOpaque(true);
+		panel.add(msgBox, 0);
+		panel.repaint();
+		/// System.out.println("Game over!");
+	}
 }
