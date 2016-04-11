@@ -15,6 +15,7 @@ public class UI {
 	int placingTower;
 	JLabel[] towerButton;
 	JLabel[][] mapBlocks;
+	JLabel[][] placeHere;
 	
 	private static Integer GROUND_LAYER = 10;
 	private static Integer TOWER_LAYER = 20;
@@ -38,7 +39,7 @@ public class UI {
 	
 	public void update() {
 		// Clear all the game objects
-		final Integer[] volatileLayers = {TOWER_LAYER, MONSTER_LAYER, SHELL_LAYER, UI_LAYER - 1, UI_LAYER, UI_LAYER + 1};
+		final Integer[] volatileLayers = {TOWER_LAYER, MONSTER_LAYER, SHELL_LAYER, UI_LAYER, UI_LAYER + 1};
 		
 		Component[] toRefresh;
 		for(int i = 0; i < volatileLayers.length; i++)
@@ -77,7 +78,7 @@ public class UI {
 					UNIT_SIZE
 			);
 			t.label.setOpaque(true);
-			/*
+			
 			JLabel totalHPLabel = new JLabel();
 			gameMap.add(totalHPLabel, UI_LAYER);
 			totalHPLabel.setBackground(Color.gray);
@@ -88,7 +89,7 @@ public class UI {
 					GAP_SIZE
 			);
 			totalHPLabel.setOpaque(true);
-			*/
+			
 			JLabel curHPLabel = new JLabel();
 			gameMap.add(curHPLabel, (Integer)(UI_LAYER + 1));
 			curHPLabel.setBackground(Color.red);
@@ -122,19 +123,20 @@ public class UI {
 		healthLabel.setText("Health : " + TowerDefense.health);
 		
 		// Placing Tower
-		if(placingTower > 0)
+		if(TowerDefense.tempTower != null)
 		{
 			for(int i = 0; i < ROW; i++)
 				for(int j = 0; j < COL; j++)
 				{
-					if(TowerDefense.vacant[i][j] == 0)
-					{
-						Point cen = gridToCoordinate(new Point(i, j));
-						JLabel here = new JLabel(new ImageIcon("placeHere.png"));
-						gameMap.add(here, (Integer)(UI_LAYER - 1));
-						here.setBounds(cen.x - UNIT_SIZE / 2, cen.y - UNIT_SIZE / 2, UNIT_SIZE, UNIT_SIZE);
-						here.setOpaque(true);
-					}
+					placeHere[i][j].setVisible(TowerDefense.vacant[i][j] == 0);
+				}
+		}
+		else
+		{
+			for(int i = 0; i < ROW; i++)
+				for(int j = 0; j < COL; j++)
+				{
+					placeHere[i][j].setVisible(false);
 				}
 		}
 		gameMap.repaint();
@@ -207,20 +209,28 @@ public class UI {
 		healthLabel.setBounds(360, 0, 100, 50);
 
 		mapBlocks = new JLabel[ROW+1][COL+1];
+		placeHere = new JLabel[ROW+1][COL+1];
 
 		for(int i = 0; i < ROW; ++i)
-		for(int j = 0; j < COL; ++j) {
-			JLabel tmpLb = new JLabel();
-			mapBlocks[i][j] = tmpLb;
-			if(TowerDefense.vacant[i][j] == -1)
-				tmpLb.setIcon(new ImageIcon("resources/Road.jpg"));
-			else
-				tmpLb.setIcon(new ImageIcon("resources/Ground.jpg"));
-			// tmpLb.setBackground(new Color((i + j) * 5 + 50, (i + j) * 5 + 50, (i + j) * 5 + 50));
-			gameMap.add(tmpLb, GROUND_LAYER);
-			tmpLb.setBounds(j * 60, i * 60, 60, 60);
-			tmpLb.setOpaque(true);
-		}
+			for(int j = 0; j < COL; ++j) {
+				JLabel tmpLb = new JLabel();
+				mapBlocks[i][j] = tmpLb;
+				if(TowerDefense.vacant[i][j] == -1)
+					tmpLb.setIcon(new ImageIcon("resources/Road.jpg"));
+				else
+					tmpLb.setIcon(new ImageIcon("resources/Ground.jpg"));
+				// tmpLb.setBackground(new Color((i + j) * 5 + 50, (i + j) * 5 + 50, (i + j) * 5 + 50));
+				gameMap.add(tmpLb, GROUND_LAYER);
+				tmpLb.setBounds(j * 60, i * 60, 60, 60);
+				tmpLb.setOpaque(true);
+				
+				placeHere[i][j] = new JLabel(new ImageIcon("resources/placeHere.jpg"));
+				gameMap.add(placeHere[i][j], (Integer)(UI_LAYER - 1));
+				Point cen = gridToCoordinate(new Point(i, j));
+				placeHere[i][j].setBounds(cen.x - UNIT_SIZE / 2, cen.y - UNIT_SIZE / 2, UNIT_SIZE, UNIT_SIZE);
+				placeHere[i][j].setOpaque(true);
+				placeHere[i][j].setVisible(false);
+			}
 	}
 
 }
