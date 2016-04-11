@@ -123,7 +123,9 @@ class Reminder{
 		TowerDefense.shells =  new HashSet<>();
 		TowerDefense.gold = start_gold;
 		TowerDefense.health = start_health;
-		TowerDefense.vacant = mapBlock.clone();
+		TowerDefense.tempTower = null;
+		for(int i = 0;i < TowerDefense.row;i++) for(int j = 0;j < TowerDefense.column;j++)
+			TowerDefense.vacant[i][j] = mapBlock[i][j];
 		TowerDefense.ui.Init();
 		for(int i = 0;i < TowerDefense.towerTypeCount;i++)
 			TowerDefense.ui.towerButton[i].addMouseListener(towerRegisters[i]);
@@ -186,7 +188,7 @@ class Reminder{
 		/// System.out.println("Start!");
 		initRes();
 		for(int i = 0;i < TowerDefense.row;i++){
-			for(int j = 0;j < TowerDefense.column;j++) System.out.printf("%d ",TowerDefense.vacant[i][j]);
+			for(int j = 0;j < TowerDefense.column;j++) System.out.printf("%d ",mapBlock[i][j]);
 			System.out.println("");
 		}
 		eventTimer = new Timer();
@@ -259,11 +261,11 @@ public class TowerDefense {
 			ui = new UI();
 			
 			int[][] m = new int[row][column];
+			vacant = new int[row][column];
 			for(int i = 0;i < row;i++){
 				JSONArray temp_row = (JSONArray)mapConfig.get(i);
-				for(int j = 0;j < column;j++) m[i][j] = (int)(long)temp_row.get(j);
+				for(int j = 0;j < column;j++) vacant[i][j] = m[i][j] = (int)(long)temp_row.get(j);
 			}
-			vacant = m.clone();
 			/* init path */
 			JSONArray path_x = (JSONArray)pathConfig.get("x"),path_y = (JSONArray)pathConfig.get("y");
 			int path_size = path_x.size();
