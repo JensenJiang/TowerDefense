@@ -167,7 +167,12 @@ public class UI {
 		panel.setOpaque(true);
 		panel.setLayout(null);
 		panel.setBackground(Color.WHITE);
-
+	}
+	
+	public void Init()
+	{
+		panel.removeAll();
+		
 		statusBar = new JPanel();
 		statusBar.setLayout(null);
 		statusBar.setBackground(new Color(200, 200, 200));

@@ -124,7 +124,7 @@ class Reminder{
 		TowerDefense.gold = start_gold;
 		TowerDefense.health = start_health;
 		TowerDefense.vacant = mapBlock.clone();
-		TowerDefense.ui = new UI();
+		TowerDefense.ui.Init();
 		for(int i = 0;i < TowerDefense.towerTypeCount;i++)
 			TowerDefense.ui.towerButton[i].addMouseListener(towerRegisters[i]);
 		for(int i = 0;i < TowerDefense.row;i++) for(int j = 0;j < TowerDefense.column;j++)
@@ -185,6 +185,10 @@ class Reminder{
 	public void start(){
 		/// System.out.println("Start!");
 		initRes();
+		for(int i = 0;i < TowerDefense.row;i++){
+			for(int j = 0;j < TowerDefense.column;j++) System.out.printf("%d ",TowerDefense.vacant[i][j]);
+			System.out.println("");
+		}
 		eventTimer = new Timer();
 		plotParser.parse();
 		updateSchedule();
@@ -251,6 +255,8 @@ public class TowerDefense {
 			/* init parameters */
 			towerTypeCount = towerConfig.size();
 			monsterTypeCount = monsterConfig.size();
+			
+			ui = new UI();
 			
 			int[][] m = new int[row][column];
 			for(int i = 0;i < row;i++){
