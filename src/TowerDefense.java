@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.json.simple.*;
@@ -136,9 +137,9 @@ class Reminder{
 	}
 	
 	private void initRes(){
-		TowerDefense.mons = new HashSet<>();
-		TowerDefense.towers = new HashSet<>();
-		TowerDefense.shells =  new HashSet<>();
+		TowerDefense.mons = Collections.synchronizedSet(new HashSet<Monster>());
+		TowerDefense.towers = Collections.synchronizedSet(new HashSet<Tower>());
+		TowerDefense.shells =  Collections.synchronizedSet(new HashSet<Shell>());
 		TowerDefense.gold = start_gold;
 		TowerDefense.health = start_health;
 		TowerDefense.nextT = 0;
@@ -172,7 +173,6 @@ class Reminder{
 				}
 				/* see if win */
 				if(final_wave && TowerDefense.mons.isEmpty()){
-					//TODO: win
 					TowerDefense.gameWin();
 					eventTimer.cancel();
 					return;
@@ -221,7 +221,6 @@ class Reminder{
 		eventTimer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
 				if(TowerDefense.nextT <= 1){
 					/* no more waves */
 					if(wave_p >= waveTime.length){
@@ -264,9 +263,9 @@ public class TowerDefense {
 	static int row = 7, column = 15;
 	static int start_x,start_y;
 	static int gold, level, health;
-	static HashSet<Tower> towers;
-	static HashSet<Monster> mons;
-	static HashSet<Shell> shells;
+	static Set<Tower> towers;
+	static Set<Monster> mons;
+	static Set<Shell> shells;
 	static int[][] vacant;	// -1 = Road, 0 = Empty ground, 1 = Built ground
 	static Tower tempTower;
 	static MonsterRegister[] monsterMaker;
