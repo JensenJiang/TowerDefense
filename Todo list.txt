@@ -1,2 +1,0 @@
-Game start & Game over事件处理,按钮设置
-图片资源
