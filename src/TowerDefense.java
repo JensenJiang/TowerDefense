@@ -4,6 +4,7 @@ import java.awt.event.MouseEvent;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Timer;
@@ -91,12 +92,16 @@ class Reminder{
 			}
 		}
 	}
+	
 	Parser plotParser;
 	Timer eventTimer;
 	int updateDelay,start_health,start_gold;
 	int[][] mapBlock;
+	int[] waveTime;
+	int wave_p;
 	TowerRegister[] towerRegisters;
 	PlaceRegister[][] placeRegisters;
+	boolean final_wave;
 	Reminder(int u_delay,int g_delay,JSONObject p,int m[][],int g,int h,TowerRegister[] _tr,PlaceRegister[][] _pr){
 		updateDelay = u_delay;
 		plotParser = new Parser(p,g_delay);
@@ -105,6 +110,12 @@ class Reminder{
 		start_health = h;
 		towerRegisters = _tr;
 		placeRegisters = _pr;
+		
+		JSONArray startTime = (JSONArray)p.get("start");
+		int _size = startTime.size();
+		waveTime = new int[_size];
+		waveTime[0] = (int)(long)startTime.get(0) - 1;
+		for(int i = 1;i < _size;i++) waveTime[i] = (int)((long)startTime.get(i) - (long)startTime.get(i - 1));
 	}
 	
 	/* maybe wrong ? about internal class */
@@ -123,12 +134,20 @@ class Reminder{
 		TowerDefense.shells =  new HashSet<>();
 		TowerDefense.gold = start_gold;
 		TowerDefense.health = start_health;
+		TowerDefense.nextT = 0;
 		TowerDefense.tempTower = null;
+		TowerDefense.level = 0;
+		final_wave = false;
+		wave_p = 0;
+		
 		for(int i = 0;i < TowerDefense.row;i++) for(int j = 0;j < TowerDefense.column;j++)
 			TowerDefense.vacant[i][j] = mapBlock[i][j];
+		
 		TowerDefense.ui.Init();
+		
 		for(int i = 0;i < TowerDefense.towerTypeCount;i++)
 			TowerDefense.ui.towerButton[i].addMouseListener(towerRegisters[i]);
+		
 		for(int i = 0;i < TowerDefense.row;i++) for(int j = 0;j < TowerDefense.column;j++)
 			TowerDefense.ui.mapBlocks[i][j].addMouseListener(placeRegisters[i][j]);
 	}
@@ -141,6 +160,13 @@ class Reminder{
 				if(TowerDefense.health <= 0)
 				{
 					TowerDefense.gameOver();
+					eventTimer.cancel();
+					return;
+				}
+				/* see if win */
+				if(final_wave && TowerDefense.mons.isEmpty()){
+					//TODO: win
+					TowerDefense.gameWin();
 					eventTimer.cancel();
 					return;
 				}
@@ -181,9 +207,36 @@ class Reminder{
 				/* add to next cycle */
 				updateSchedule();
 			}
-		}, updateDelay);
-		
+		}, updateDelay);	
 	}
+	
+	private void updateTimeDisplay(){
+		eventTimer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				if(TowerDefense.nextT <= 1){
+					/* no more waves */
+					if(wave_p >= waveTime.length){
+						final_wave = true;
+						TowerDefense.nextT = 0;
+						return;
+					}
+					/* load this wave time */
+					else{
+						if(TowerDefense.nextT != 0) TowerDefense.level++;
+						TowerDefense.nextT = waveTime[wave_p];
+						wave_p++;
+					}
+				}
+				else{
+					TowerDefense.nextT--;
+				}
+				updateTimeDisplay();
+			}
+		}, 1000);
+	}
+	
 	public void start(){
 		/// System.out.println("Start!");
 		initRes();
@@ -193,6 +246,7 @@ class Reminder{
 		}
 		eventTimer = new Timer();
 		plotParser.parse();
+		updateTimeDisplay();
 		updateSchedule();
 	}
 }
@@ -308,6 +362,10 @@ public class TowerDefense {
 	public static void gameOver()
 	{
 		ui.showGameOver();
+	}
+	
+	public static void gameWin(){
+		System.out.println("You win!");
 	}
 	
 	public static void main(String[] args) {
