@@ -14,7 +14,7 @@ public class Tower {
 	int atk;
 	double rate;
 	double range;
-	public boolean toDestroy = false;
+	public boolean toDestroy = false;	// whether this object need to be destroyed
 	
 	private int timer = 0;
 	
@@ -74,6 +74,7 @@ public class Tower {
 		}
 	}
 	
+	// To attack a monster
 	void attack(Monster m)
 	{
 		Shell s = new Shell(shellPicName, scx, scy, atk, 0.4, m);
@@ -82,13 +83,17 @@ public class Tower {
 		// System.out.println("Attack!");
 	}
 	
+	// To search for monster in range
 	Monster search()
 	{
+		Monster targM = null;
+		double farthest = 0;
 		for(Monster m : TowerDefense.mons){
-			if(Point.distance(scx, scy, m.x, m.y) <= range){
-				return m;
+			if(Point.distance(scx, scy, m.x, m.y) <= range && m.lifeDist > farthest){
+				targM = m;
+				farthest = m.lifeDist;
 			}
 		}
-		return null;
+		return targM;
 	}
 }

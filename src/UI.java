@@ -165,8 +165,10 @@ public class UI {
 		}
 		
 		gameMap.repaint();
+		// SwingUtilities.invokeLater(() -> gameMap.repaint());
 	}
 	
+	// Constructor: to create the frame
 	UI()
 	{
 		frame = new JFrame();
@@ -182,22 +184,26 @@ public class UI {
 		panel.setBackground(Color.WHITE);
 	}
 	
+	// To initialize(when starting a new game)
 	public void Init()
 	{
 		panel.removeAll();
-		
+
+		// setup statusBar
 		statusBar = new JPanel();
 		statusBar.setLayout(null);
 		statusBar.setBackground(new Color(200, 200, 200));
 		statusBar.setBounds(0, 0, 900, 60);
 		statusBar.setOpaque(true);
 
+		// setup controlPanel
 		controlPanel = new JPanel();
 		controlPanel.setLayout(null);
 		controlPanel.setBackground(new Color(200, 200, 200));
 		controlPanel.setBounds(0, 480, 900, 200);
 		controlPanel.setOpaque(true);
 
+		// add towerButton to controlPanel
 		int ttc = TowerDefense.towerTypeCount;
 		towerButton = new JLabel[ttc];
 		for(int i = 0; i < ttc; i++)
@@ -209,6 +215,7 @@ public class UI {
 			towerButton[i].setOpaque(false);
 		}
 
+		// setup gameMap
 		gameMap = new JLayeredPane();
 		gameMap.setLayout(null);
 		gameMap.setBackground(new Color(100, 100, 100));
@@ -222,6 +229,7 @@ public class UI {
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		// set labels
 		goldLabel = new JLabel("Gold : " + TowerDefense.gold);
 		statusBar.add(goldLabel);
 		goldLabel.setBounds(50, 0, 150, 50);
@@ -238,7 +246,7 @@ public class UI {
 		statusBar.add(healthLabel);
 		healthLabel.setBounds(680, 0, 150, 50);
 		
-		// $mapBlock and $placeHere
+		// build mapBlock and placeHere
 		mapBlocks = new JLabel[ROW+1][COL+1];
 		placeHere = new JLabel[ROW+1][COL+1];
 
@@ -291,7 +299,6 @@ public class UI {
 		msg.setOpaque(true);
 		restart.setOpaque(true);
 		quit.setOpaque(true);
-		// msgBox.setBackground(Color.gray);
 		msgBox.setVisible(true);
 		msgBox.setOpaque(true);
 		panel.add(msgBox, 0);
@@ -326,7 +333,6 @@ public class UI {
 		msg.setOpaque(true);
 		restart.setOpaque(true);
 		quit.setOpaque(true);
-		// msgBox.setBackground(Color.gray);
 		msgBox.setVisible(true);
 		msgBox.setOpaque(true);
 		panel.add(msgBox, 0);

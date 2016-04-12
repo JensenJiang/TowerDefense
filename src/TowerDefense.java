@@ -10,6 +10,9 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javax.swing.SwingUtilities;
+
 import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -256,7 +259,7 @@ class Reminder{
 				}
 				
 				/* update UI */
-				TowerDefense.ui.update();
+				SwingUtilities.invokeLater(() -> TowerDefense.ui.update());
 				
 				/* add to next cycle */
 				updateSchedule();
@@ -299,10 +302,12 @@ class Reminder{
 	public void start(){
 		/// System.out.println("Start!");
 		initRes();
+		/*
 		for(int i = 0;i < TowerDefense.row;i++){
 			for(int j = 0;j < TowerDefense.column;j++) System.out.printf("%d ",mapBlock[i][j]);
 			System.out.println("");
 		}
+		*/
 		eventTimer = new Timer();
 		plotParser.parse();
 		updateTimeDisplay();

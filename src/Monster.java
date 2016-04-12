@@ -2,7 +2,7 @@ import java.awt.*;
 import javax.swing.*;
 
 public class Monster {
-	static Point[] path;
+	static Point[] path;	// monsters go along the path
 	
 	String picName;
 	public JLabel label;
@@ -13,7 +13,7 @@ public class Monster {
 	double x, y;
 	double angle;
 	public boolean toDestroy = false;
-	public int lifeTime = 0;
+	public double lifeDist = 0;
 	
 	int destID;		// going to path[destID]
 	
@@ -67,7 +67,7 @@ public class Monster {
 	{
 		if(toDestroy)
 			return;
-		lifeTime++;
+		
 		if(curHP <= 0)
 		{
 			die();
@@ -75,6 +75,7 @@ public class Monster {
 		}
 		x += speed * TowerDefense.deltaTime * Math.cos(angle);
 		y += speed * TowerDefense.deltaTime * Math.sin(angle);
+		lifeDist += speed * TowerDefense.deltaTime;
 		
 		if(Point.distance(x, y, path[destID].getX(), path[destID].getY()) < 0.01)
 			destID++;
@@ -86,6 +87,7 @@ public class Monster {
 		angle = Math.atan2(path[destID].getY() - y, path[destID].getX() - x);
 	}
 	
+	// To take damage
 	public void hurt(int damage)
 	{
 		curHP -= damage;
@@ -93,6 +95,7 @@ public class Monster {
 			die();
 	}
 	
+	// To escape from the map
 	void escape()
 	{
 		if(toDestroy)
@@ -101,6 +104,7 @@ public class Monster {
 		toDestroy = true;
 	}
 	
+	// To die
 	void die()
 	{
 		if(toDestroy)

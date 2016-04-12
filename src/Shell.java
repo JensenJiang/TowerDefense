@@ -54,6 +54,7 @@ public class Shell {
 			explode();
 	}
 	
+	// To reach the target and deal damage
 	public void explode()
 	{
 		// System.out.println("Boom!");
