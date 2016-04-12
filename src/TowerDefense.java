@@ -14,6 +14,13 @@ import org.json.simple.*;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+/**
+ * A register class used to bind a 
+ * specific tower class with the respective
+ * tower button.
+ * @author jensen
+ *
+ */
 class TowerRegister extends MouseAdapter{
 	String picName,shellPicName;
 	double rate,range;
@@ -34,7 +41,6 @@ class TowerRegister extends MouseAdapter{
 				+ "Price: $" + price
 				+ "</html>";
 	}
-	/* Only Add to */
 	@Override
 	public void mouseClicked(MouseEvent e){
 		if(TowerDefense.moneyEnough(price))
@@ -42,6 +48,13 @@ class TowerRegister extends MouseAdapter{
 	}
 }
 
+/**
+ * A register class used to bind a 
+ * specific place with the respective
+ * place button.
+ * @author jensen
+ *
+ */
 class PlaceRegister extends MouseAdapter{
 	int x,y;
 	public PlaceRegister(int _x,int _y) {
@@ -61,6 +74,14 @@ class PlaceRegister extends MouseAdapter{
 	}
 }
 
+/**
+ * A register class served as a 
+ * "Method Factory" used to produce
+ * a specific monster and add it
+ * into the monster container.
+ * @author jensen
+ *
+ */
 class MonsterRegister{
 	String picName;
 	double speed,x,y;
@@ -79,7 +100,19 @@ class MonsterRegister{
 	}
 }
 
+/**
+ * A wrapper of the Timer class used 
+ * to schedule the whole game process.
+ * @author jensen
+ *
+ */
 class Reminder{
+	/**
+	 * Parser used to parse the game plot,
+	 * and pass it to Reminder.
+	 * @author jensen
+	 *
+	 */
 	class Parser{
 		int delay;
 		private Object[] startTime,monCount,monList;
@@ -110,6 +143,7 @@ class Reminder{
 	TowerRegister[] towerRegisters;
 	PlaceRegister[][] placeRegisters;
 	boolean final_wave;
+	
 	Reminder(int u_delay,int g_delay,JSONObject p,int m[][],int g,int h,TowerRegister[] _tr,PlaceRegister[][] _pr){
 		updateDelay = u_delay;
 		plotParser = new Parser(p,g_delay);
@@ -126,7 +160,13 @@ class Reminder{
 		for(int i = 1;i < _size;i++) waveTime[i] = (int)((long)startTime.get(i) - (long)startTime.get(i - 1));
 	}
 	
-	/* maybe wrong ? about internal class */
+	/**
+	 * 
+	 * @param e 
+	 * a monster register
+	 * @param time
+	 * the time when the monster appears
+	 */
 	private void addMonsterSchedule(MonsterRegister e,int time){
 		eventTimer.schedule(new TimerTask() {
 			@Override
@@ -136,6 +176,9 @@ class Reminder{
 		}, time);
 	}
 	
+	/**
+	 * Initialize the necessary resource before every start
+	 */
 	private void initRes(){
 		TowerDefense.mons = Collections.synchronizedSet(new HashSet<Monster>());
 		TowerDefense.towers = Collections.synchronizedSet(new HashSet<Tower>());
@@ -160,6 +203,10 @@ class Reminder{
 			TowerDefense.ui.mapBlocks[i][j].addMouseListener(placeRegisters[i][j]);
 	}
 	
+	/**
+	 * Schedule the update of the main game process,
+	 * with delay time "updateDelay"
+	 */
 	private void updateSchedule(){
 		eventTimer.schedule(new TimerTask() {
 			@Override
@@ -217,6 +264,9 @@ class Reminder{
 		}, updateDelay);	
 	}
 	
+	/**
+	 * Schedule the update of time display
+	 */
 	private void updateTimeDisplay(){
 		eventTimer.schedule(new TimerTask() {
 			@Override
@@ -243,6 +293,9 @@ class Reminder{
 		}, 1000);
 	}
 	
+	/**
+	 * Start the schedule
+	 */
 	public void start(){
 		/// System.out.println("Start!");
 		initRes();
@@ -257,6 +310,11 @@ class Reminder{
 	}
 }
 
+/**
+ * Main Class of the game
+ * @author jensen
+ *
+ */
 public class TowerDefense {
 	/* Resource */
 	static int deltaTime = 50;
@@ -302,7 +360,10 @@ public class TowerDefense {
 		schedule.start();
 	}
 	
-	/* Init */
+	/**
+	 * Initialize the game before the first start.
+	 * Read in configuration files.
+	 */
 	static void init(){
 		/* Open Config File */
 		JSONParser parser = new JSONParser();
