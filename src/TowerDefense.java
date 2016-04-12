@@ -292,7 +292,7 @@ public class TowerDefense {
 			}
 			
 			/* init global schedule */
-			schedule = new Reminder(deltaTime,1500,plotConfig,m,100,1,tr,pr);
+			schedule = new Reminder(deltaTime,1500,plotConfig,m,100,10,tr,pr);
 			
 		}catch(FileNotFoundException e){
 			System.out.println("Couldn't open json file:");

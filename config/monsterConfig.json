@@ -1,5 +1,17 @@
 [{"picName":"resources/Monster0.png",
  "speed":0.1,
  "totalHP":10,
- "killMoney":20}
+ "killMoney":20},
+ {"picName":"resources/Monster1.png",
+ "speed":0.1,
+ "totalHP":15,
+ "killMoney":25},
+ {"picName":"resources/Monster2.png",
+ "speed":0.2,
+ "totalHP":12,
+ "killMoney":30},
+ {"picName":"resources/Monster3.png",
+ "speed":0.15,
+ "totalHP":30,
+ "killMoney":45}
 ]

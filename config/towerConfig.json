@@ -10,4 +10,16 @@
  "range":200.0,
  "price":60,
  "atk":5}
+ {"picName":"resources/Tower2.png",
+ "shellPicName":"resources/Shell2.png",
+ "rate":1.0,
+ "range":400.0,
+ "price":70,
+ "atk":3}
+ {"picName":"resources/Tower3.png",
+ "shellPicName":"resources/Shell3.png",
+ "rate":0.5,
+ "range":200.0,
+ "price":150,
+ "atk":12}
 ]
