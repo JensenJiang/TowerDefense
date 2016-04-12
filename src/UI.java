@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 
@@ -144,11 +145,23 @@ public class UI {
 		// tower buttons
 		for(int i = 0; i < towerButton.length; i++)
 		{
-			int towerPrice = ((TowerRegister)towerButton[i].getMouseListeners()[0]).price;
+			MouseListener[] mls = towerButton[i].getMouseListeners();
+			TowerRegister tr = null;
+			for(MouseListener m : mls)
+			{
+				if(m instanceof TowerRegister)
+				{
+					tr = (TowerRegister)m;
+					break;
+				}
+			}
+			int towerPrice = tr.price;
+			String towerInfo = tr.towerInfo;
 			if(TowerDefense.moneyEnough(towerPrice))
 				towerButton[i].setEnabled(true);
 			else
 				towerButton[i].setEnabled(false);
+			towerButton[i].setToolTipText(towerInfo);
 		}
 		
 		gameMap.repaint();
@@ -257,6 +270,41 @@ public class UI {
 		msgBox.setBounds(300, 250, 300, 100);
 		
 		JLabel msg = new JLabel("Game Over");
+		msg.setFont(new Font(null, Font.PLAIN, 20));
+		msg.setBounds(90, 0, 200, 40);
+		
+		JButton restart = new JButton("Restart");
+		restart.addActionListener(e -> {
+			TowerDefense.startGame();
+		});
+		restart.setBounds(20, 50, 120, 30);
+		
+		JButton quit = new JButton("Quit");
+		quit.addActionListener(e -> {
+			System.exit(0);
+		});
+		quit.setBounds(160, 50, 120, 30);
+		
+		msgBox.add(msg);
+		msgBox.add(restart);
+		msgBox.add(quit);
+		msg.setOpaque(true);
+		restart.setOpaque(true);
+		quit.setOpaque(true);
+		// msgBox.setBackground(Color.gray);
+		msgBox.setVisible(true);
+		msgBox.setOpaque(true);
+		panel.add(msgBox, 0);
+		panel.repaint();
+		/// System.out.println("Game over!");
+	}
+	
+	public void showGameWin()
+	{
+		msgBox = new JPanel(new FlowLayout());
+		msgBox.setBounds(300, 250, 300, 100);
+		
+		JLabel msg = new JLabel("You Win!");
 		msg.setFont(new Font(null, Font.PLAIN, 20));
 		msg.setBounds(90, 0, 200, 40);
 		

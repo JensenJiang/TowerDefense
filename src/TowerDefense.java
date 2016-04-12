@@ -17,6 +17,7 @@ class TowerRegister extends MouseAdapter{
 	String picName,shellPicName;
 	double rate,range;
 	int price,atk;
+	String towerInfo;
 	public TowerRegister(JSONObject config) {
 		/* Parse */
 		picName = (String)config.get("picName");
@@ -25,6 +26,12 @@ class TowerRegister extends MouseAdapter{
 		range = (Double)config.get("range");
 		price = (int)(long)config.get("price");
 		atk = (int)(long)config.get("atk");
+		towerInfo = "<html>"
+				+ "Attack: " + atk + "<br>"
+				+ "Rate: " + rate + "sec/atk" + "<br>"
+				+ "Range: " + range + "<br>"
+				+ "Price: $" + price
+				+ "</html>";
 	}
 	/* Only Add to */
 	@Override
@@ -365,7 +372,7 @@ public class TowerDefense {
 	}
 	
 	public static void gameWin(){
-		System.out.println("You win!");
+		ui.showGameWin();
 	}
 	
 	public static void main(String[] args) {
